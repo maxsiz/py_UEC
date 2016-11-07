@@ -23,10 +23,14 @@ print (len(UC))
 
 logfile = open('settle_log.txt','w')
 logfile.write( 'Карты ездили, но не пополнялись: '+str(len(UC-RC))+'\n')
-for n in UC-RC:
+L=list(UC-RC)
+L.sort()
+for n in L:
   logfile.write(n+'\n')
 logfile.write( 'Карты пополнены на отчетный месяц, но не ездили в нем: '+str(len(RC-UC))+'\n')
-for n in RC-UC:
+M=list(RC-UC)
+M.sort()
+for n in M:
   logfile.write(n+'\n')
 
 print (' подробности в settle_log.txt')
