@@ -79,6 +79,7 @@ for x in open(file1,encoding='cp1251'):
         card_trip_count_sl[x.rstrip().split(';')[0]]  += int(x.rstrip().split(';')[2])
         all_trips +=int(x.rstrip().split(';')[2])
 print ('Словарь заполнен- ', str(all_trips)) 
+itogi_ls=[]
 #строим множество перевозчиков по городу
 ans_r4_f = open(file1,encoding='cp1251')
 carrier_gorod_ls = [curr_str.rstrip().split(';')[1] for curr_str in ans_r4_f 
@@ -114,6 +115,11 @@ for carrier in carrier_gorod_set:
     cur_carrier_file.write('Karta;Kper;Kobsh;Dolya;Sum_150'+'\n')    
     cur_carrier_file.writelines(carrier_tickets)
     print ('ok '+ str(len(carrier_tickets)))
+    #добавим итоги по файлу в отдельный список
+    s_poezdok = sum([int(x.rstrip().split(';')[1]) for x in carrier_tickets])
+    s_sum150  = sum([ float(x.rstrip().split(';')[4].replace(',','.')) for x in carrier_tickets])
+    itogi_ls.append('0;'+carrier+';'+str(len(carrier_tickets))+';'
+                    +str(round(s_poezdok,2))+';'+str(round(s_sum150,2)).replace('.',',') +'\n')
 ans_r4_f.close()
 #строим множество перевозчиков по пригороду
 ans_r4_f = open(file1,encoding='cp1251')
@@ -150,4 +156,21 @@ for carrier in carrier_prigorod_set:
     cur_carrier_file.write('Karta;Kper;Kobsh;Dolya;Sum_150'+'\n')    
     cur_carrier_file.writelines(carrier_tickets)
     print ('ok '+ str(len(carrier_tickets)))
+    #добавим итоги по файлу в отдельный список
+    s_poezdok = sum([int(x.rstrip().split(';')[1]) for x in carrier_tickets])
+    s_sum150  = sum([ float(x.rstrip().split(';')[4].replace(',','.')) for x in carrier_tickets])
+    itogi_ls.append('1;'+carrier+';'+str(len(carrier_tickets))+';'
+                    +str(round(s_poezdok,2))+';'+str(round(s_sum150,2)).replace('.',',') +'\n')
+
 ans_r4_f.close()
+
+#print (itogi_ls)
+#запишем в итоговый файл
+cur_carrier_file=open('itog_raschet_'
+                          +str(now_date.year)
+                          +str(now_date.month).rjust(2,'0')
+                          +str(now_date.day).rjust(2,'0')
+                          +'.csv','w')
+cur_carrier_file.write('Vid;Carrier;Tickets;Trips;Sum_150'+'\n')    
+cur_carrier_file.writelines(itogi_ls)
+
