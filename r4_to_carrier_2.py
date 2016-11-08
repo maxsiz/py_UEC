@@ -103,6 +103,7 @@ for carrier in carrier_gorod_set:
                            ).replace('.',',')+'\n'    
                       for cur_str in ans_r4_f if cur_str.rstrip().split(';')[1]==carrier #совпал перевозчик
                                                 and int(cur_str.rstrip().split(';')[4])==0 # запись подтверждена
+                                                and cur_str.rstrip().split(';')[7]=='0'#городские поездки
                       ] 
     now_date = datetime.date.today()
     cur_carrier_file=open(carrier+'_raschet_g_'
@@ -139,6 +140,7 @@ for carrier in carrier_prigorod_set:
                            ).replace('.',',')+'\n'    
                       for cur_str in ans_r4_f if cur_str.rstrip().split(';')[1]==carrier #совпал перевозчик
                                                  and int(cur_str.rstrip().split(';')[4])==0 # запись подтверждена
+                                                 and cur_str.rstrip().split(';')[7]=='1'#пригородные поездки
                       ] 
     cur_carrier_file=open(carrier+'_raschet_p_'
                           +str(now_date.year)
