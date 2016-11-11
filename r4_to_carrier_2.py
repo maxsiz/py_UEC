@@ -17,21 +17,26 @@ def get_sum_card_and_carr (card_num,carrier_code):
     res = 0
     if  len(cardcarrier_sum)>1:  #если словарь по третьему файлу не пустой
         if  card_num not in card_change_sl and card_num not in card_change_sl.values():
-            res = cardcarrier_sum[carrier_code+'_'+card_num]/100    
+            #res = cardcarrier_sum[carrier_code+'_'+card_num]/100 
+            sum_nko= cardcarrier_sum[carrier_code+'_'+card_num]/100   
         else: #кейс с перевыпуском
-            res = cardcarrier_sum[carrier_code+'_'+card_num]//2/100
-    else:
-        if  card_num not in card_change_sl and card_num not in card_change_sl.values():
-            res = math.trunc(int(r4_cardcarrier_sum[carrier_code+'_'+card_num])
+            #res = cardcarrier_sum[carrier_code+'_'+card_num]//2/100
+            sum_nko=cardcarrier_sum[carrier_code+'_'+card_num]//2/100
+    
+    if  card_num not in card_change_sl and card_num not in card_change_sl.values():
+        res = math.trunc(int(r4_cardcarrier_sum[carrier_code+'_'+card_num])
                                       /card_trip_count_sl[card_num]
-                                       *150*100#/100*100
+                                       *150*100
+                                      #  *100*150
                                       )/100 #cумма по карте                            
-        else: #кейс с перевыпуском
-            res = math.trunc(int(r4_cardcarrier_sum[carrier_code+'_'+card_num])
-                             #round(int(r4_cardcarrier_sum[carrier_code+'_'+card_num])
+    else: #кейс с перевыпуском
+          res = math.trunc(int(r4_cardcarrier_sum[carrier_code+'_'+card_num])
                                       /card_trip_count_sl[card_num]
-                                       *150*100#100*100/2
+                                       *150*100
+                                      #  *100*150
                                       )//2/100
+    if round(abs(res-sum_nko),2)==0.01:
+       res=sum_nko
     return res
 #*****************************************************************************************
 #class Infile:
@@ -54,7 +59,7 @@ else:
 #строим словарь с ключами из номеров подтвержденных карт
 print ('строим словарь с ключами из номеров подтвержденных карт - .. ', end='')
 card_trip_count_sl = {data.rstrip().split(';')[0]:0  for data in open(file1, encoding='cp1251') 
-                if len(data.rstrip().split(';')[0])==9 
+                if  len(data.rstrip().split(';')[0])==9 
                     and int(data.rstrip().split(';')[4])==0
                      }
 print ('ok '+ str(len(card_trip_count_sl)))
@@ -82,8 +87,8 @@ else:
 #заполним словарь общим количеством поездок по картам
 all_trips = 0
 for x in open(file1,encoding='cp1251'):
-    if  x.rstrip().split(';')[0] in card_trip_count_sl.keys():
-        card_trip_count_sl[x.rstrip().split(';')[0]]  += int(x.rstrip().split(';')[2])
+    if  x.rstrip().split(';')[0] in card_trip_count_sl.keys()  and int(x.rstrip().split(';')[4])==0:
+        card_trip_count_sl[x.rstrip().split(';')[0]]  += int(x.rstrip().split(';')[2]) 
         all_trips +=int(x.rstrip().split(';')[2])
 print ('Словарь заполнен- ', str(all_trips)) 
 itogi_ls=[]
