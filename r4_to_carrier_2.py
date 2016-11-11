@@ -15,8 +15,11 @@ def get_sum_card_and_carr (card_num,carrier_code):
     Возвращает сумма по карте и перевозчику
     """
     res = 0
-    if  len(cardcarrier_sum)>0:  #если словарь по третьему файлу не пустой
-        res = cardcarrier_sum[carrier_code+'_'+card_num]    
+    if  len(cardcarrier_sum)>1:  #если словарь по третьему файлу не пустой
+        if  card_num not in card_change_sl and card_num not in card_change_sl.values():
+            res = cardcarrier_sum[carrier_code+'_'+card_num]/100    
+        else: #кейс с перевыпуском
+            res = cardcarrier_sum[carrier_code+'_'+card_num]//2/100
     else:
         if  card_num not in card_change_sl and card_num not in card_change_sl.values():
             res = math.trunc(int(r4_cardcarrier_sum[carrier_code+'_'+card_num])
@@ -31,6 +34,10 @@ def get_sum_card_and_carr (card_num,carrier_code):
                                       )//2/100
     return res
 #*****************************************************************************************
+#class Infile:
+#    def __init__ (self,name, mode,cp):
+#        self.name = name
+#        open(name, mode, encoding = cp)
 #print (sys.argv)
 if len(sys.argv)==3:
    file1 = sys.argv[1]#Ans_r4*
@@ -67,9 +74,9 @@ if  file3 !='' :
     print(file3)
     print ('строим словарь с ключами из "перевозчик_карта" - .. ', end='')
     cardcarrier_sum = {cs.rstrip().split(';')[0]+'_'
-                       +cs.rstrip().split(';')[4][10:]:int(cs.rstrip().split(';')[6])/100 
+                       +cs.rstrip().split(';')[4][10:]:int(cs.rstrip().split(';')[6]) 
                        for cs in open(file3)  if len(cs.rstrip().split(';')[4][10:])==9}
-    print ('ok '+ str(len(cardcarrier_sum)))
+    print ('ok, cardcarrier_sum'+ str(len(cardcarrier_sum)))
 else:
     cardcarrier_sum ={}
 #заполним словарь общим количеством поездок по картам
