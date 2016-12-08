@@ -35,8 +35,9 @@ def get_sum_card_and_carr (card_num,carrier_code):
                                        *150*100
                                       #  *100*150
                                       )//2/100
-    if round(abs(res-sum_nko),2)==0.01:
-       res=sum_nko
+    if  len(cardcarrier_sum)>1:  #если словарь по третьему файлу не пустой
+        if round(abs(res-sum_nko),2)==0.01:
+           res=sum_nko
     return res
 #*****************************************************************************************
 #class Infile:
@@ -54,7 +55,7 @@ elif len(sys.argv)==4:
    file3 = sys.argv[3]#первичный(не обработанный) файл перечислений для замены сумм
 else:
    print (len(sys.argv))
-   print ('wrong params number ',len(sys.argv), ' , usage: r4_to_carrier.py file1 file2')
+   print ('wrong params number ',len(sys.argv), ' , usage:', sys.argv[1], ' file1 file2')
    sys.exit
 #строим словарь с ключами из номеров подтвержденных карт
 print ('строим словарь с ключами из номеров подтвержденных карт - .. ', end='')

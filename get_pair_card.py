@@ -1,14 +1,17 @@
 # -*- coding: cp1251 -*-
-# Скрипт
+# Скрипт которые 
 import subprocess as sp
 import fnmatch 
 import os
 import sys
 #1. first buld SET of active cards
-ac_file=open('Ans_r4_38_20161102_0080.csv', encoding='cp1251')
+#ac_file=open('Ans_r4_38_20161102_0080.csv', encoding='cp1251')
+ac_file=open('80_nocharge.txt', encoding='cp1251')
 ac_ls = [x.rstrip().split(';')[0] for x in ac_file if x.rstrip().split(';')[0] !='NUM']
 AC=set(ac_ls)
 AC.discard('')
+print ('Найдено карт: ', len(AC))
+#print(AC)
 #2. buld SET of linked cards
 lc_root_folder=r"/home/max_siz/Documents/LINK/YAD/MINSOC/R1"
 tree = os.walk(lc_root_folder) #дерево папок и файлов в объекте-генераторе 
@@ -24,8 +27,10 @@ for d in tree:
                       and x.rstrip().split(';')[5] in AC
                  ]
        ls = ls + temp_ls
+       print(f +' - '+str(len(temp_ls)))
 LC = set(ls)
-LC.discard('')
+LC.discard('') #получили множество карта;снилс для  тех карт,  котрые есть в ответнике р4 из строки 8 этого скрипта
+print(LC)
 ls = list(LC)
 ls1=[]
 
